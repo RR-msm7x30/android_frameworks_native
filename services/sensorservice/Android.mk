@@ -14,6 +14,13 @@ LOCAL_SRC_FILES:= \
     SensorInterface.cpp \
     SensorService.cpp
 
+# Legacy virtual sensors used in combination from accelerometer & magnetometer.
+LOCAL_SRC_FILES += \
+	legacy/SecondOrderLowPassFilter.cpp \
+	legacy/LegacyGravitySensor.cpp \
+	legacy/LegacyLinearAccelerationSensor.cpp \
+	legacy/LegacyRotationVectorSensor.cpp
+
 LOCAL_CFLAGS:= -DLOG_TAG=\"SensorService\"
 
 LOCAL_CFLAGS += -fvisibility=hidden

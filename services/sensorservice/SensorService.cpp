@@ -50,6 +50,9 @@
 #include "RotationVectorSensor.h"
 #include "SensorFusion.h"
 #include "SensorService.h"
+#include "legacy/LegacyGravitySensor.h"
+#include "legacy/LegacyLinearAccelerationSensor.h"
+#include "legacy/LegacyRotationVectorSensor.h"
 
 namespace android {
 // ---------------------------------------------------------------------------
@@ -155,6 +158,28 @@ void SensorService::onFirstRef()
                 // virtual debugging sensors are not added to mUserSensorList
                 registerVirtualSensor( new CorrectedGyroSensor(list, count) );
                 registerVirtualSensor( new GyroDriftSensor() );
+            }
+            else
+            {
+                Sensor aSensor;
+
+                // Add Android virtual sensors if they're not already
+                // available in the HAL
+
+                aSensor = registerVirtualSensor( new LegacyRotationVectorSensor() );
+                if (virtualSensorsNeeds & (1<<SENSOR_TYPE_ROTATION_VECTOR)) {
+                    mUserSensorList.add(aSensor);
+                }
+
+                aSensor = registerVirtualSensor( new LegacyGravitySensor(list, count) );
+                if (virtualSensorsNeeds & (1<<SENSOR_TYPE_GRAVITY)) {
+                    mUserSensorList.add(aSensor);
+                }
+
+                aSensor = registerVirtualSensor( new LegacyLinearAccelerationSensor(list, count) );
+                if (virtualSensorsNeeds & (1<<SENSOR_TYPE_LINEAR_ACCELERATION)) {
+                    mUserSensorList.add(aSensor);
+                }
             }
 
             // debugging sensor list
