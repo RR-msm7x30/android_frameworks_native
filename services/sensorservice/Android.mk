@@ -35,6 +35,10 @@ LOCAL_SHARED_LIBRARIES := \
 	libui \
 	libgui
 
+ifneq ($(BOARD_USE_LEGACY_SENSORS_FUSION),false)
+    LOCAL_CFLAGS += -DUSE_LEGACY_SENSORS_FUSION
+endif
+
 LOCAL_MODULE:= libsensorservice
 
 include $(BUILD_SHARED_LIBRARY)
